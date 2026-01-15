@@ -161,4 +161,13 @@
   .checkbox-habit[data-state="checked"] {
     @apply bg-primary border-primary;
   }
+
+  @keyframes check-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .animate-check-bounce {
+    animation: check-bounce 0.2s ease-out;
+  }
 }

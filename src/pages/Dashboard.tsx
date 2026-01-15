@@ -56,6 +56,8 @@ export default function Dashboard() {
     setDeletingId(null);
   };
 
+  const todayStr = format(today, 'yyyy-MM-dd');
+
   const isCompletedOnDate = (habit: typeof habits[0], date: string) => {
     return habit.completions.some(c => c.completed_date === date);
   };
@@ -65,7 +67,8 @@ export default function Dashboard() {
     return completion?.count ?? null;
   };
 
-  const completedCount = habits.filter(h => h.completedToday).length;
+  // Use real-time check against completions rather than cached completedToday
+  const completedCount = habits.filter(h => isCompletedOnDate(h, todayStr)).length;
   const totalCount = habits.length;
 
   return (
