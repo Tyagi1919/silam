@@ -25,10 +25,10 @@ export function Layout({ children }: LayoutProps) {
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">H</span>
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">श</span>
               </div>
-              <span className="font-semibold hidden sm:inline">Habit Tracker</span>
+              <span className="font-semibold hidden sm:inline bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Śīlam</span>
             </Link>
             <nav className="flex items-center gap-1">
               {navItems.map((item) => (

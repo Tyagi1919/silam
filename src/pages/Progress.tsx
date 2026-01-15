@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Layout } from '@/components/Layout';
 import { StatCard } from '@/components/StatCard';
 import { ProgressCalendar } from '@/components/ProgressCalendar';
+import { CompletionChart } from '@/components/CompletionChart';
 import { useHabits } from '@/hooks/useHabits';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Select,
   SelectContent,
@@ -16,6 +18,7 @@ import { useState } from 'react';
 export default function Progress() {
   const { habits, isLoading } = useHabits();
   const [selectedHabitId, setSelectedHabitId] = useState<string>('all');
+  const isMobile = useIsMobile();
 
   if (isLoading) {
     return (
@@ -97,6 +100,9 @@ export default function Progress() {
               />
             </div>
 
+            {/* Chart - moved to top on mobile */}
+            {isMobile && <CompletionChart habits={habits} />}
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-base font-medium">Calendar View</CardTitle>
@@ -126,6 +132,9 @@ export default function Progress() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Chart - on desktop, show after calendar */}
+            {!isMobile && <CompletionChart habits={habits} />}
 
             <div className="space-y-4">
               <h2 className="text-lg font-semibold">Habit Details</h2>

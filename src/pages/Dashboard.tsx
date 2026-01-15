@@ -1,7 +1,5 @@
 import { format } from 'date-fns';
-import { Plus, Target } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Target, Sparkles } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { HabitTableTracker } from '@/components/HabitTableTracker';
 import { CompletionChart } from '@/components/CompletionChart';
@@ -17,7 +15,40 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+
+const MOTIVATIONAL_QUOTES = [
+  "Small daily improvements lead to stunning results.",
+  "Consistency is more important than perfection.",
+  "Every day is a chance to build a better you.",
+  "Your habits shape your future.",
+  "Progress, not perfection.",
+  "The secret of your future is hidden in your daily routine.",
+  "What you do every day matters more than what you do once in a while.",
+  "Success is the sum of small efforts repeated day in and day out.",
+  "Habits are the compound interest of self-improvement.",
+  "You don't have to be great to start, but you have to start to be great.",
+  "The only bad workout is the one that didn't happen.",
+  "Discipline is the bridge between goals and accomplishment.",
+  "Your future is created by what you do today, not tomorrow.",
+  "Excellence is not an act but a habit.",
+  "Start where you are. Use what you have. Do what you can.",
+  "The journey of a thousand miles begins with a single step.",
+  "Make each day your masterpiece.",
+  "Be stronger than your excuses.",
+  "Believe you can and you're halfway there.",
+  "Action is the foundational key to all success.",
+  "It's not about having time, it's about making time.",
+  "Dream big. Start small. Act now.",
+  "The best time to plant a tree was 20 years ago. The second best time is now.",
+  "Don't count the days, make the days count.",
+  "Push yourself because no one else is going to do it for you.",
+  "Great things never come from comfort zones.",
+  "Motivation gets you started. Habit keeps you going.",
+  "You are what you repeatedly do.",
+  "Little by little, a little becomes a lot.",
+  "Stay focused and never give up."
+];
 
 export default function Dashboard() {
   const { habits, isLoading, toggleCompletion, deleteHabit } = useHabits();
@@ -58,6 +89,14 @@ export default function Dashboard() {
 
   const todayStr = format(today, 'yyyy-MM-dd');
 
+  // Get a consistent quote based on the day of the year
+  const dailyQuote = useMemo(() => {
+    const startOfYear = new Date(today.getFullYear(), 0, 0);
+    const diff = today.getTime() - startOfYear.getTime();
+    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+    return MOTIVATIONAL_QUOTES[dayOfYear % MOTIVATIONAL_QUOTES.length];
+  }, [today]);
+
   const isCompletedOnDate = (habit: typeof habits[0], date: string) => {
     return habit.completions.some(c => c.completed_date === date);
   };
@@ -74,6 +113,14 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="space-y-6">
+        {/* Motivational Quote */}
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-primary/20 p-4">
+          <Sparkles className="absolute top-2 right-2 h-5 w-5 text-primary/40" />
+          <p className="text-sm sm:text-base font-medium text-foreground/90 italic pr-6">
+            "{dailyQuote}"
+          </p>
+        </div>
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Habit Tracker</h1>
@@ -81,12 +128,6 @@ export default function Dashboard() {
               {format(today, 'EEEE, MMMM d, yyyy')}
             </p>
           </div>
-          <Link to="/create">
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              New Habit
-            </Button>
-          </Link>
         </div>
 
         {totalCount > 0 && (
