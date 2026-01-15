@@ -58,13 +58,13 @@ export function HabitTableTracker({
   const weekEnd = endOfWeek(baseDate, { weekStartsOn: 1 });
   const daysOfWeek = eachDayOfInterval({ start: weekStart, end: weekEnd });
 
-  // For mobile, show only 3 days centered around today
+  // For mobile, show 5 days centered around today (no scroller)
   const mobileDays = isMobile 
     ? daysOfWeek.filter(day => {
         const dayIndex = daysOfWeek.indexOf(day);
         const todayIndex = daysOfWeek.findIndex(d => isToday(d));
         const centerIndex = todayIndex >= 0 ? todayIndex : 3;
-        return Math.abs(dayIndex - centerIndex) <= 1;
+        return Math.abs(dayIndex - centerIndex) <= 2; // Show 5 days (-2 to +2)
       })
     : daysOfWeek;
 
@@ -227,8 +227,8 @@ export function HabitTableTracker({
                     </div>
                   )}
 
-                  {/* Day Checkboxes */}
-                  <div className="flex items-center justify-around pt-2 border-t border-border">
+                  {/* Day Checkboxes - 5 days, compact layout */}
+                  <div className="grid grid-cols-5 gap-0.5 pt-2 border-t border-border">
                     {displayDays.map((day) => {
                       const dateStr = format(day, 'yyyy-MM-dd');
                       const isCompleted = isCompletedOnDate(habit, dateStr);
@@ -236,15 +236,15 @@ export function HabitTableTracker({
                       const isFuture = day > today;
                       
                       return (
-                        <div key={day.toISOString()} className="flex flex-col items-center gap-1">
+                        <div key={day.toISOString()} className="flex flex-col items-center gap-0.5 py-1">
                           <span className={cn(
-                            "text-xs font-medium",
+                            "text-[10px] font-medium",
                             isToday(day) && "text-primary"
                           )}>
                             {format(day, 'EEE')}
                           </span>
                           <span className={cn(
-                            "text-sm",
+                            "text-xs",
                             isToday(day) && "font-bold text-primary"
                           )}>
                             {format(day, 'd')}
@@ -254,13 +254,13 @@ export function HabitTableTracker({
                             onCheckedChange={() => handleCellClick(habit, day)}
                             disabled={isFuture}
                             className={cn(
-                              "checkbox-habit",
+                              "checkbox-habit h-5 w-5",
                               isCompleted && "animate-check-bounce",
                               isFuture && "opacity-30"
                             )}
                           />
                           {habit.track_count && count !== null && (
-                            <span className="text-xs text-primary font-medium">
+                            <span className="text-[10px] text-primary font-medium">
                               {count}
                             </span>
                           )}
