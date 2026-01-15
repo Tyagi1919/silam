@@ -22,6 +22,8 @@ const habitSchema = z.object({
   weekly_days: z.array(z.number()).optional(),
   start_date: z.string(),
   reminder_time: z.string().optional(),
+  track_count: z.boolean().optional(),
+  count_goal: z.number().min(1).optional(),
 });
 
 export type HabitFormData = z.infer<typeof habitSchema>;
@@ -59,12 +61,15 @@ export function HabitForm({ defaultValues, onSubmit, isLoading, submitLabel = 'S
       weekly_days: [],
       start_date: format(new Date(), 'yyyy-MM-dd'),
       reminder_time: '',
+      track_count: false,
+      count_goal: undefined,
       ...defaultValues,
     },
   });
 
   const frequency = watch('frequency');
   const weeklyDays = watch('weekly_days') || [];
+  const trackCount = watch('track_count');
 
   const toggleDay = (day: number) => {
     const current = weeklyDays;
@@ -156,6 +161,40 @@ export function HabitForm({ defaultValues, onSubmit, isLoading, submitLabel = 'S
         <p className="text-xs text-muted-foreground">
           Set a time to receive browser notifications
         </p>
+      </div>
+
+      <div className="space-y-4 p-4 rounded-lg border border-border bg-muted/30">
+        <div className="flex items-center space-x-3">
+          <Checkbox
+            id="track_count"
+            checked={trackCount}
+            onCheckedChange={(checked) => {
+              setValue('track_count', checked === true);
+              if (!checked) {
+                setValue('count_goal', undefined);
+              }
+            }}
+          />
+          <Label htmlFor="track_count" className="font-normal cursor-pointer">
+            Do you want to count it?
+          </Label>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Enable this to track a count (e.g., glasses of water, pages read)
+        </p>
+        
+        {trackCount && (
+          <div className="space-y-2 pt-2">
+            <Label htmlFor="count_goal">Set a goal (optional)</Label>
+            <Input
+              id="count_goal"
+              type="number"
+              placeholder="e.g., 8 glasses"
+              min="1"
+              {...register('count_goal', { valueAsNumber: true })}
+            />
+          </div>
+        )}
       </div>
 
       <Button type="submit" className="w-full" disabled={isLoading}>

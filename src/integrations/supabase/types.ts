@@ -17,18 +17,21 @@ export type Database = {
       habit_completions: {
         Row: {
           completed_date: string
+          count: number | null
           created_at: string
           habit_id: string
           id: string
         }
         Insert: {
           completed_date?: string
+          count?: number | null
           created_at?: string
           habit_id: string
           id?: string
         }
         Update: {
           completed_date?: string
+          count?: number | null
           created_at?: string
           habit_id?: string
           id?: string
@@ -45,6 +48,7 @@ export type Database = {
       }
       habits: {
         Row: {
+          count_goal: number | null
           created_at: string
           description: string | null
           frequency: Database["public"]["Enums"]["habit_frequency"]
@@ -52,11 +56,13 @@ export type Database = {
           name: string
           reminder_time: string | null
           start_date: string
+          track_count: boolean
           updated_at: string
           user_id: string
           weekly_days: number[] | null
         }
         Insert: {
+          count_goal?: number | null
           created_at?: string
           description?: string | null
           frequency?: Database["public"]["Enums"]["habit_frequency"]
@@ -64,11 +70,13 @@ export type Database = {
           name: string
           reminder_time?: string | null
           start_date?: string
+          track_count?: boolean
           updated_at?: string
           user_id: string
           weekly_days?: number[] | null
         }
         Update: {
+          count_goal?: number | null
           created_at?: string
           description?: string | null
           frequency?: Database["public"]["Enums"]["habit_frequency"]
@@ -76,6 +84,7 @@ export type Database = {
           name?: string
           reminder_time?: string | null
           start_date?: string
+          track_count?: boolean
           updated_at?: string
           user_id?: string
           weekly_days?: number[] | null

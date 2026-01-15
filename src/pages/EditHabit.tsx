@@ -27,6 +27,8 @@ export default function EditHabit() {
         weekly_days: data.frequency === 'weekly' ? data.weekly_days : null,
         start_date: data.start_date,
         reminder_time: data.reminder_time || null,
+        track_count: data.track_count || false,
+        count_goal: data.track_count ? data.count_goal : null,
       });
       toast({
         title: 'Habit updated!',
@@ -95,6 +97,8 @@ export default function EditHabit() {
                 weekly_days: habit.weekly_days || [],
                 start_date: habit.start_date,
                 reminder_time: habit.reminder_time || '',
+                track_count: habit.track_count || false,
+                count_goal: habit.count_goal || undefined,
               }}
               onSubmit={handleSubmit}
               isLoading={updateHabit.isPending}

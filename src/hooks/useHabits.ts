@@ -111,7 +111,7 @@ export function useHabits() {
   });
 
   const toggleCompletion = useMutation({
-    mutationFn: async ({ habitId, date }: { habitId: string; date: string }) => {
+    mutationFn: async ({ habitId, date, count }: { habitId: string; date: string; count?: number }) => {
       const { data: existing } = await supabase
         .from('habit_completions')
         .select('id')
@@ -126,9 +126,16 @@ export function useHabits() {
           .eq('id', existing.id);
         if (error) throw error;
       } else {
+        const insertData: { habit_id: string; completed_date: string; count?: number } = { 
+          habit_id: habitId, 
+          completed_date: date 
+        };
+        if (count !== undefined) {
+          insertData.count = count;
+        }
         const { error } = await supabase
           .from('habit_completions')
-          .insert({ habit_id: habitId, completed_date: date });
+          .insert(insertData);
         if (error) throw error;
       }
     },
