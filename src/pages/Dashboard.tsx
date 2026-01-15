@@ -2,7 +2,6 @@ import { format } from 'date-fns';
 import { Target, Sparkles } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { HabitTableTracker } from '@/components/HabitTableTracker';
-import { CompletionChart } from '@/components/CompletionChart';
 import { useHabits } from '@/hooks/useHabits';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -122,42 +121,23 @@ export default function Dashboard() {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">Habit Tracker</h1>
-            <p className="text-muted-foreground">
-              {format(today, 'EEEE, MMMM d, yyyy')}
-            </p>
-          </div>
+          <p className="text-muted-foreground">
+            {format(today, 'EEEE, MMMM d, yyyy')}
+          </p>
         </div>
-
-        {totalCount > 0 && (
-          <div className="flex items-center gap-2 text-sm">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted">
-              <Target className="h-4 w-4 text-primary" />
-              <span>
-                {completedCount} of {totalCount} completed today
-              </span>
-            </div>
-          </div>
-        )}
 
         {isLoading ? (
           <div className="space-y-3">
             <div className="h-[300px] rounded-lg bg-muted animate-pulse" />
-            <div className="h-[300px] rounded-lg bg-muted animate-pulse" />
           </div>
         ) : (
-          <>
-            <HabitTableTracker
-              habits={habits}
-              onToggle={handleToggle}
-              onDelete={(id) => setDeletingId(id)}
-              isCompletedOnDate={isCompletedOnDate}
-              getCompletionCount={getCompletionCount}
-            />
-
-            <CompletionChart habits={habits} />
-          </>
+          <HabitTableTracker
+            habits={habits}
+            onToggle={handleToggle}
+            onDelete={(id) => setDeletingId(id)}
+            isCompletedOnDate={isCompletedOnDate}
+            getCompletionCount={getCompletionCount}
+          />
         )}
 
         <AlertDialog open={!!deletingId} onOpenChange={(open) => !open && setDeletingId(null)}>
