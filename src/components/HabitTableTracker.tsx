@@ -414,9 +414,9 @@ export function HabitTableTracker({
         </div>
       )}
 
-      {/* Count Dialog */}
+      {/* Count Dialog - positioned at top for mobile keyboard visibility */}
       <Dialog open={countDialog?.open ?? false} onOpenChange={(open) => !open && setCountDialog(null)}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md top-[10%] translate-y-0 data-[state=open]:slide-in-from-top-[5%] max-h-[85vh] overflow-auto">
           <DialogHeader>
             <DialogTitle>Track Count - {countDialog?.habitName}</DialogTitle>
           </DialogHeader>
