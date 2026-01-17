@@ -4,6 +4,7 @@ import { Layout } from '@/components/Layout';
 import { StatCard } from '@/components/StatCard';
 import { ProgressCalendar } from '@/components/ProgressCalendar';
 import { CompletionChart } from '@/components/CompletionChart';
+import { AchievementBadges } from '@/components/AchievementBadges';
 import { useHabits } from '@/hooks/useHabits';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
@@ -16,7 +17,7 @@ import {
 import { useState } from 'react';
 
 export default function Progress() {
-  const { habits, isLoading } = useHabits();
+  const { habits, globalStats, isLoading } = useHabits();
   const [selectedHabitId, setSelectedHabitId] = useState<string>('all');
   const isMobile = useIsMobile();
 
@@ -43,8 +44,6 @@ export default function Progress() {
 
   // Calculate aggregate stats
   const totalHabits = habits.length;
-  const bestStreak = Math.max(0, ...habits.map(h => h.longestStreak));
-  const currentStreaks = habits.reduce((sum, h) => sum + h.currentStreak, 0);
   const avgCompletion = totalHabits > 0
     ? Math.round(habits.reduce((sum, h) => sum + h.completionRate, 0) / totalHabits)
     : 0;
@@ -83,14 +82,14 @@ export default function Progress() {
               />
               <StatCard
                 icon={Flame}
-                label="Active Streaks"
-                value={currentStreaks}
+                label="Active Streak"
+                value={`${globalStats.globalCurrentStreak} days`}
                 variant="streak"
               />
               <StatCard
                 icon={Trophy}
                 label="Best Streak"
-                value={`${bestStreak} days`}
+                value={`${globalStats.globalLongestStreak} days`}
                 variant="success"
               />
               <StatCard
@@ -99,6 +98,9 @@ export default function Progress() {
                 value={`${avgCompletion}%`}
               />
             </div>
+
+            {/* Achievement Badges */}
+            <AchievementBadges habits={habits} globalStats={globalStats} />
 
             {/* Chart - moved to top on mobile */}
             {isMobile && <CompletionChart habits={habits} />}
